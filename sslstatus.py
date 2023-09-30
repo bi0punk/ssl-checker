@@ -25,6 +25,11 @@ import ssl
 import socket
 import datetime
 
+import socket
+import ssl
+import datetime
+from prettytable import PrettyTable
+
 def check_ssl_certificate(domain):
     try:
         context = ssl.create_default_context()
@@ -34,18 +39,25 @@ def check_ssl_certificate(domain):
                 not_after = datetime.datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
                 current_time = datetime.datetime.now()
                 if not_after > current_time:
-                    print(f"El certificado SSL de {domain} es válido hasta {not_after}.")
+                    estado_certificado = "Al día"
                 else:
-                    print(f"El certificado SSL de {domain} ha caducado el {not_after}.")
+                    estado_certificado = "Vencido"
+                
+                return [domain, cert['subjectAltName'][0][1], not_after.strftime('%Y-%m-%d'), estado_certificado]
     except (socket.gaierror, ssl.SSLError, ConnectionRefusedError) as e:
-        print(f"No se pudo conectar a {domain}. Error: {e}")
+        return [domain, "Error", "", "No se pudo conectar"]
 
 if __name__ == "__main__":
     domains_to_check = ["youtube.com",
                         "github.com",
                         "netflix.com"
-                        
                         ]
-    for domain in domains_to_check:
-        check_ssl_certificate(domain)
+    
+    table = PrettyTable()
+    table.field_names = ["Sitio Consultado", "Código de Respuesta", "Fecha de Vencimiento", "Estado del Certificado"]
 
+    for domain in domains_to_check:
+        result = check_ssl_certificate(domain)
+        table.add_row(result)
+
+    print(table)
