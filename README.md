@@ -2,7 +2,7 @@
 #
 #  sin título.py
 #  
-#  Copyright 2023 sysbot <bi0punk>
+#  Copyright 2023 bi0punk <bi0punk>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
