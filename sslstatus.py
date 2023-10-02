@@ -34,8 +34,12 @@ def format_date(date):
         return ""
 
 if __name__ == "__main__":
-    domains_to_check = [
-                        ]
+    # Leer los enlaces desde el archivo de texto
+    domains_to_check = []
+    with open("enlaces.txt", "r") as file:
+        for line in file:
+            domain = line.strip()  # Eliminar espacios en blanco y saltos de línea
+            domains_to_check.append(domain)
     
     table = PrettyTable()
     table.field_names = ["Sitio Consultado", "Código de Respuesta", "Fecha de Vencimiento", "Estado del Certificado"]
