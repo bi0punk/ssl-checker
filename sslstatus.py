@@ -1,26 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#  sslstatus.py
-#  
-#  Copyright 2023 sysbot <sysbot@kali-server>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#  
-
+import http.client
 import socket
 import ssl
 import datetime
@@ -45,13 +23,17 @@ def check_ssl_certificate(domain):
                 response = conn.getresponse()
                 codigo_respuesta = response.status
                 
-                return [domain, str(codigo_respuesta), not_after.strftime('%Y-%m-%d'), estado_certificado]
+                return [domain, str(codigo_respuesta), not_after, estado_certificado]
     except (socket.gaierror, ssl.SSLError, ConnectionRefusedError, http.client.HTTPException) as e:
         return [domain, "Error", "", "No se pudo conectar"]
 
+def format_date(date):
+    if date:
+        return date.strftime('%d, %B, %Y')
+    else:
+        return ""
+
 if __name__ == "__main__":
-    import http.client
-    
     domains_to_check = [
                         ]
     
@@ -60,12 +42,12 @@ if __name__ == "__main__":
 
     for domain in domains_to_check:
         result = check_ssl_certificate(domain)
-        if result[2]:  # Verificar si la fecha no está vacía
-            # Modificar el formato de la fecha
-            result[2] = datetime.datetime.strptime(result[2], '%Y-%m-%d').strftime('%d, %B, %Y')
+        result[2] = format_date(result[2])  # Formatear la fecha
         table.add_row(result)
 
+    # Imprimir la tabla en la consola
     print(table)
-
+    
+    # Guardar la tabla en un archivo .txt
     with open("ssl_status.txt", "w") as file:
         file.write(str(table))
