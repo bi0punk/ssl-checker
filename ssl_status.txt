@@ -1,0 +1,29 @@
++--------------------------------+---------------------+----------------------+------------------------+
+|        Sitio Consultado        | Código de Respuesta | Fecha de Vencimiento | Estado del Certificado |
++--------------------------------+---------------------+----------------------+------------------------+
+|            mboss.cl            |        Error        |                      |  No se pudo conectar   |
+|         api.mesos.tech         |         404         | 12, September, 2024  |         Al día         |
+|            mesos.cl            |         200         |  14, October, 2023   |         Al día         |
+|        api-oci.mboss.cl        |         200         |  02, November, 2023  |         Al día         |
+|         api2.mboss.cl          |        Error        |                      |  No se pudo conectar   |
+|         api3.mboss.cl          |        Error        |                      |  No se pudo conectar   |
+|     bastion-prod.mboss.cl      |        Error        |                      |  No se pudo conectar   |
+|      cancelacion.mboss.cl      |         302         |  09, December, 2023  |         Al día         |
+|        citroen.mboss.cl        |         302         |  09, December, 2023  |         Al día         |
+|        coseche.mboss.cl        |         302         |  09, December, 2023  |         Al día         |
+|        externo.mboss.cl        |         404         |  10, December, 2023  |         Al día         |
+|         fboss.mboss.cl         |         302         |  09, December, 2023  |         Al día         |
+|       forumboss.mboss.cl       |         302         |  09, December, 2023  |         Al día         |
+|          gm.mboss.cl           |         302         |  09, December, 2023  |         Al día         |
+|         mesos.mboss.cl         |         302         |  09, December, 2023  |         Al día         |
+|     mesos-db-prod.mboss.cl     |        Error        |                      |  No se pudo conectar   |
+|        nissan.mboss.cl         |         302         |  09, December, 2023  |         Al día         |
+|     pbossconsulta.mboss.cl     |        Error        |                      |  No se pudo conectar   |
+|        pentaho.mboss.cl        |         302         |  10, December, 2023  |         Al día         |
+|       portillo.mboss.cl        |         302         |  09, December, 2023  |         Al día         |
+|    renunciadigital.mboss.cl    |         302         |  09, December, 2023  |         Al día         |
+|        salazar.mboss.cl        |         302         |  09, December, 2023  |         Al día         |
+|       servimaq.mboss.cl        |         302         |  09, December, 2023  |         Al día         |
+|  acme-challenge.tass.mboss.cl  |        Error        |                      |  No se pudo conectar   |
+| acme-challenge.tassag.mboss.cl |        Error        |                      |  No se pudo conectar   |
++--------------------------------+---------------------+----------------------+------------------------+

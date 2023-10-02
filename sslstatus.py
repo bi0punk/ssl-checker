@@ -21,10 +21,6 @@
 #  MA 02110-1301, USA.
 #  
 
-import ssl
-import socket
-import datetime
-
 import socket
 import ssl
 import datetime
@@ -43,14 +39,20 @@ def check_ssl_certificate(domain):
                 else:
                     estado_certificado = "Vencido"
                 
-                return [domain, cert['subjectAltName'][0][1], not_after.strftime('%Y-%m-%d'), estado_certificado]
-    except (socket.gaierror, ssl.SSLError, ConnectionRefusedError) as e:
+                # Obtener el código de respuesta HTTP
+                conn = http.client.HTTPSConnection(domain)
+                conn.request("HEAD", "/")
+                response = conn.getresponse()
+                codigo_respuesta = response.status
+                
+                return [domain, str(codigo_respuesta), not_after.strftime('%Y-%m-%d'), estado_certificado]
+    except (socket.gaierror, ssl.SSLError, ConnectionRefusedError, http.client.HTTPException) as e:
         return [domain, "Error", "", "No se pudo conectar"]
 
 if __name__ == "__main__":
-    domains_to_check = ["youtube.com",
-                        "github.com",
-                        "netflix.com"
+    import http.client
+    
+    domains_to_check = [
                         ]
     
     table = PrettyTable()
@@ -58,6 +60,12 @@ if __name__ == "__main__":
 
     for domain in domains_to_check:
         result = check_ssl_certificate(domain)
+        if result[2]:  # Verificar si la fecha no está vacía
+            # Modificar el formato de la fecha
+            result[2] = datetime.datetime.strptime(result[2], '%Y-%m-%d').strftime('%d, %B, %Y')
         table.add_row(result)
 
     print(table)
+
+    with open("ssl_status.txt", "w") as file:
+        file.write(str(table))
