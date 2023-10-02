@@ -8,6 +8,7 @@ def check_ssl_certificate(domain):
     try:
         context = ssl.create_default_context()
         with socket.create_connection((domain, 443)) as sock:
+            sock.settimeout(10)  # Establece un tiempo de espera de 10 segundos
             with context.wrap_socket(sock, server_hostname=domain) as ssock:
                 cert = ssock.getpeercert()
                 not_after = datetime.datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
@@ -24,7 +25,7 @@ def check_ssl_certificate(domain):
                 codigo_respuesta = response.status
                 
                 return [domain, str(codigo_respuesta), not_after, estado_certificado]
-    except (socket.gaierror, ssl.SSLError, ConnectionRefusedError, http.client.HTTPException) as e:
+    except (socket.gaierror, ssl.SSLError, ConnectionRefusedError, http.client.HTTPException, socket.timeout) as e:
         return [domain, "Error", "", "No se pudo conectar"]
 
 def format_date(date):
