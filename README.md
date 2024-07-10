@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+""" -*- coding: utf-8 -*-
 #
-#  sin título.py
+#  sin_título.py
 #  
 #  Copyright 2023 bi0punk <bi0punk>
 #  
@@ -18,7 +18,11 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
-# # ssl-checker
-script simple de python que muestra el estado del certifiacdo ssl del sitio o app web comsultado
+#
+
+
+Este es un script simple de Python que muestra el estado del certificado SSL del sitio o aplicación web consultado.
+
+
 #!/usr/bin/env python
+"""
