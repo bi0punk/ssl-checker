@@ -1,28 +1,88 @@
-""" -*- coding: utf-8 -*-
-#
-#  sin_título.py
-#  
-#  Copyright 2023 bi0punk <bi0punk>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
+# ssl-checker
 
+Script en Python que verifica el **certificado SSL** de una lista de dominios, consulta su estado HTTP y genera un reporte (consola + `ssl_status.txt`).
 
-Este es un script simple de Python que muestra el estado del certificado SSL del sitio o aplicación web consultado.
+[![Python](https://img.shields.io/badge/Python-3-blue)](https://python.org)
 
+## Contenido
 
-#!/usr/bin/env python
-"""
+- [Características](#características)
+- [Arquitectura](#arquitectura)
+- [Stack](#stack)
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Roadmap](#roadmap)
+- [Licencia](#licencia)
+
+## Características
+
+- Lee los dominios desde `enlaces.txt` (uno por línea).
+- Abre un *handshake* TLS (puerto 443, timeout 10 s) y extrae el certificado.
+- Calcula el **estado del certificado**: `Al día` o `Vencido`, con la fecha de vencimiento formateada.
+- Obtiene el **código de respuesta HTTP** (`HEAD /`) de cada sitio.
+- Genera una tabla con `PrettyTable` en consola y la guarda en `ssl_status.txt`.
+- Maneja errores de conexión (DNS, SSL, timeout, *connection refused*).
+
+## Arquitectura
+
+```mermaid
+flowchart TD
+  E[enlaces.txt<br/>un dominio por línea] --> L{por cada dominio}
+  L --> C[check_ssl_certificate]
+  C -->|handshake TLS :443| V{¿notAfter &gt; ahora?}
+  V -->|sí| OK[Estado: Al día]
+  V -->|no| EXP[Estado: Vencido]
+  C -->|HEAD /| H[Código HTTP]
+  OK & EXP & H --> T[PrettyTable]
+  T --> CON[Consola]
+  T --> OUT[ssl_status.txt]
+  C -.->|error conexión| ER[No se pudo conectar]
+```
+
+## Stack
+
+- Python 3
+- Módulos estándar: `ssl`, `socket`, `http.client`, `datetime`
+- `prettytable` para la salida en tabla
+
+## Instalación
+
+```bash
+git clone https://github.com/bi0punk/ssl-checker.git
+cd ssl-checker
+pip install prettytable
+```
+
+## Uso
+
+```bash
+# 1. Edita enlaces.txt: un dominio por línea (sin http://)
+echo "github.com" >> enlaces.txt
+echo "example.com" >> enlaces.txt
+
+# 2. Ejecuta el chequeo
+python sslstatus.py
+```
+
+Ejemplo de salida:
+
+```
++---------------------+--------------------+---------------------+------------------------+
+| Sitio Consultado    | Código de Respuesta| Fecha de Vencimiento | Estado del Certificado |
++---------------------+--------------------+---------------------+------------------------+
+| github.com          | 200                | 08, August, 2027     | Al día                 |
+```
+
+El mismo reporte se guarda en `ssl_status.txt`.
+
+## Roadmap
+
+- [x] Verificación de caducidad y estado HTTP
+- [x] Reporte en consola + archivo
+- [ ] Soporte de puertos y SNI personalizados
+- [ ] Exportar a CSV
+- [ ] Alertas por correo/notificación ante vencimiento próximo
+
+## Licencia
+
+Sin archivo `LICENSE` declarado en el repositorio.
